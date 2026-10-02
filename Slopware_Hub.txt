@@ -1,0 +1,941 @@
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/gen2"))()
+
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+
+local Window = Rayfield:CreateWindow({
+    Name = "Slopware"
+})
+
+local MainTab = Window:CreateTab({
+    Name = "Main"
+})
+
+local ESPEnabled = false
+local ESPObjects = {}
+
+local function RemoveESP(Player)
+    if ESPObjects[Player] then
+        for _, Object in ipairs(ESPObjects[Player]) do
+            if Object and Object.Parent then
+                Object:Destroy()
+            end
+        end
+        ESPObjects[Player] = nil
+    end
+end
+
+local function AddESP(Player)
+    if not Player or Player.Name ~= "CriminalBlueGuy" then
+        return
+    end
+
+    RemoveESP(Player)
+
+    local Character = Player.Character
+    if not Character then
+        return
+    end
+
+    local Highlight = Instance.new("Highlight")
+    Highlight.Name = "SlopwareESP"
+    Highlight.Adornee = Character
+    Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    Highlight.FillTransparency = 0.5
+    Highlight.OutlineTransparency = 0
+    Highlight.Parent = Character
+
+    local Billboard = Instance.new("BillboardGui")
+    Billboard.Name = "SlopwareESPText"
+    Billboard.Size = UDim2.fromOffset(150, 40)
+    Billboard.StudsOffset = Vector3.new(0, 3.5, 0)
+    Billboard.AlwaysOnTop = true
+    Billboard.Parent = Character
+
+    local Text = Instance.new("TextLabel")
+    Text.Size = UDim2.fromScale(1, 1)
+    Text.BackgroundTransparency = 1
+    Text.Text = "right here"
+    Text.TextScaled = true
+    Text.Font = Enum.Font.GothamBold
+    Text.TextColor3 = Color3.new(1, 1, 1)
+    Text.TextStrokeTransparency = 0
+    Text.Parent = Billboard
+
+    ESPObjects[Player] = {
+        Highlight,
+        Billboard
+    }
+end
+
+local function WatchESPPlayer(Player)
+    Player.CharacterAdded:Connect(function()
+        task.wait(0.5)
+
+        if ESPEnabled then
+            AddESP(Player)
+        end
+    end)
+
+    if ESPEnabled and Player.Character then
+        AddESP(Player)
+    end
+end
+
+MainTab:CreateToggle({
+    Name = "Chill Dev ESP",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        ESPEnabled = Value
+
+        local Player = Players:FindFirstChild("CriminalBlueGuy")
+
+        if Value then
+            if Player then
+                AddESP(Player)
+            end
+        else
+            if Player then
+                RemoveESP(Player)
+            end
+        end
+    end
+})
+
+local CriminalPlayer = Players:FindFirstChild("CriminalBlueGuy")
+
+if CriminalPlayer then
+    WatchESPPlayer(CriminalPlayer)
+end
+
+Players.PlayerAdded:Connect(function(Player)
+    if Player.Name == "CriminalBlueGuy" then
+        WatchESPPlayer(Player)
+
+        task.wait(0.5)
+
+        if ESPEnabled then
+            AddESP(Player)
+        end
+    end
+end)
+
+Players.PlayerRemoving:Connect(function(Player)
+    RemoveESP(Player)
+end)
+
+local BadObjects = {
+    FrontCurtain = true,
+    BadBurger = true,
+    BadHotdog = true,
+    BadChicken = true
+}
+
+local AutoRemove = false
+
+MainTab:CreateToggle({
+    Name = "Remove Curtains n More",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        AutoRemove = Value
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.2) do
+        if AutoRemove then
+            for _, Object in ipairs(workspace:GetDescendants()) do
+                if BadObjects[Object.Name] then
+                    pcall(function()
+                        Object:Destroy()
+                    end)
+                end
+            end
+        end
+    end
+end)
+
+local AutoFood = false
+
+MainTab:CreateToggle({
+    Name = "Auto Click Food",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        AutoFood = Value
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if AutoFood then
+            for _, Object in ipairs(workspace:GetDescendants()) do
+                if Object.Name == "Burger"
+                    or Object.Name == "Chicken"
+                    or Object.Name == "Hotdog" then
+
+                    local Detector =
+                        Object:FindFirstChildOfClass("ClickDetector")
+
+                    if Detector then
+                        pcall(function()
+                            fireclickdetector(Detector)
+                        end)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+local AutoCriminal = false
+
+MainTab:CreateToggle({
+    Name = "Auto Click Criminal",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        AutoCriminal = Value
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if AutoCriminal then
+            local Criminal =
+                workspace:FindFirstChild("CriminalBlueGuy", true)
+
+            if Criminal then
+                for _, Object in ipairs(Criminal:GetDescendants()) do
+                    if Object:IsA("ClickDetector") then
+                        pcall(function()
+                            fireclickdetector(Object)
+                        end)
+                    end
+                end
+
+                if Criminal:IsA("BasePart") then
+                    local Detector =
+                        Criminal:FindFirstChildOfClass("ClickDetector")
+
+                    if Detector then
+                        pcall(function()
+                            fireclickdetector(Detector)
+                        end)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+local AutoDetectWin = false
+local AutoWinBaseplate
+
+local function CreateAutoWinBaseplate()
+    local Character = LocalPlayer.Character
+    local Root =
+        Character
+        and Character:FindFirstChild("HumanoidRootPart")
+
+    if not Root then
+        return
+    end
+
+    if AutoWinBaseplate and AutoWinBaseplate.Parent then
+        Root.CFrame =
+            AutoWinBaseplate.CFrame + Vector3.new(0, 5, 0)
+        return
+    end
+
+    AutoWinBaseplate = Instance.new("Part")
+    AutoWinBaseplate.Name = "AutoWinBaseplate"
+    AutoWinBaseplate.Size = Vector3.new(500, 2, 500)
+    AutoWinBaseplate.Position =
+        Root.Position + Vector3.new(0, 1000, 0)
+    AutoWinBaseplate.Anchored = true
+    AutoWinBaseplate.CanCollide = true
+    AutoWinBaseplate.CanTouch = true
+    AutoWinBaseplate.CanQuery = true
+    AutoWinBaseplate.Material = Enum.Material.SmoothPlastic
+    AutoWinBaseplate.Parent = workspace
+
+    Root.CFrame =
+        AutoWinBaseplate.CFrame + Vector3.new(0, 5, 0)
+end
+
+local function AutoWinClickCriminal()
+    local Criminal =
+        workspace:FindFirstChild("CriminalBlueGuy", true)
+
+    if Criminal then
+        for _, Object in ipairs(Criminal:GetDescendants()) do
+            if Object:IsA("ClickDetector") then
+                pcall(function()
+                    fireclickdetector(Object)
+                end)
+            end
+        end
+
+        if Criminal:IsA("BasePart") then
+            local Detector =
+                Criminal:FindFirstChildOfClass("ClickDetector")
+
+            if Detector then
+                pcall(function()
+                    fireclickdetector(Detector)
+                end)
+            end
+        end
+    end
+end
+
+local function AutoWinEatFood()
+    for _, Object in ipairs(workspace:GetDescendants()) do
+        if Object.Name == "Burger"
+            or Object.Name == "Chicken"
+            or Object.Name == "Hotdog" then
+
+            local Detector =
+                Object:FindFirstChildOfClass("ClickDetector")
+
+            if Detector then
+                pcall(function()
+                    fireclickdetector(Detector)
+                end)
+            end
+        end
+    end
+end
+
+local function MakeBaseballsMassive()
+    for _, Object in ipairs(workspace:GetDescendants()) do
+        if Object.Name:lower() == "baseball"
+            and Object:IsA("BasePart") then
+
+            pcall(function()
+                Object.Size = Vector3.new(500, 500, 500)
+            end)
+        end
+    end
+end
+
+local function CheckExplosion()
+    local Explosion =
+        workspace:FindFirstChild("Explosion", true)
+
+    if Explosion then
+        CreateAutoWinBaseplate()
+        return true
+    end
+
+    return false
+end
+
+local function GardenPartIsOwnedByLocalPlayer(GardenPart)
+    local Owner = GardenPart:FindFirstChild("PartOwner", true)
+
+    if not Owner then
+        return false
+    end
+
+    local OwnerValue
+
+    pcall(function()
+        OwnerValue = Owner.Value
+    end)
+
+    if typeof(OwnerValue) == "Instance" then
+        return OwnerValue == LocalPlayer
+    end
+
+    if typeof(OwnerValue) == "number" then
+        return OwnerValue == LocalPlayer.UserId
+    end
+
+    if typeof(OwnerValue) == "string" then
+        return OwnerValue == LocalPlayer.Name
+            or OwnerValue == LocalPlayer.DisplayName
+            or OwnerValue == tostring(LocalPlayer.UserId)
+    end
+
+    return false
+end
+
+local AutoShoot = false
+local CurrentTarget = nil
+local TargetStartTime = 0
+local LastTarget = nil
+
+local function GetRandomTarget()
+    local Targets = {}
+
+    for _, Player in ipairs(Players:GetPlayers()) do
+        if Player ~= LocalPlayer and Player ~= LastTarget then
+            local Character = Player.Character
+            local Humanoid =
+                Character
+                and Character:FindFirstChildOfClass("Humanoid")
+
+            if Humanoid and Humanoid.Health > 0 then
+                table.insert(Targets, Player)
+            end
+        end
+    end
+
+    if #Targets == 0 then
+        for _, Player in ipairs(Players:GetPlayers()) do
+            if Player ~= LocalPlayer then
+                local Character = Player.Character
+                local Humanoid =
+                    Character
+                    and Character:FindFirstChildOfClass("Humanoid")
+
+                if Humanoid and Humanoid.Health > 0 then
+                    table.insert(Targets, Player)
+                end
+            end
+        end
+    end
+
+    if #Targets > 0 then
+        return Targets[math.random(1, #Targets)]
+    end
+
+    return nil
+end
+
+local function ShootTarget(TargetPlayer)
+    if not TargetPlayer then
+        return false
+    end
+
+    local Character = LocalPlayer.Character
+
+    if not Character then
+        return false
+    end
+
+    local Root =
+        Character:FindFirstChild("HumanoidRootPart")
+
+    local Pistol =
+        Character:FindFirstChild("PistolTool")
+
+    local Activation =
+        Pistol
+        and Pistol:FindFirstChild("Activation")
+
+    if not Root or not Activation then
+        return false
+    end
+
+    local TargetCharacter = TargetPlayer.Character
+
+    if not TargetCharacter then
+        return false
+    end
+
+    local TargetRoot =
+        TargetCharacter:FindFirstChild("HumanoidRootPart")
+
+    local Humanoid =
+        TargetCharacter:FindFirstChildOfClass("Humanoid")
+
+    if not TargetRoot
+        or not Humanoid
+        or Humanoid.Health <= 0 then
+        return false
+    end
+
+    Root.CFrame =
+        TargetRoot.CFrame
+        * CFrame.new(0, 0, 5)
+
+    pcall(function()
+        Activation:FireServer(
+            TargetRoot,
+            TargetRoot.CFrame
+        )
+    end)
+
+    return true
+end
+
+MainTab:CreateToggle({
+    Name = "AutoShoot",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        AutoShoot = Value
+
+        if not Value then
+            CurrentTarget = nil
+            LastTarget = nil
+            TargetStartTime = 0
+        end
+    end
+})
+
+local function AutoWinShoot()
+    if not CurrentTarget
+        or not CurrentTarget.Character
+        or not CurrentTarget.Character:FindFirstChildOfClass("Humanoid")
+        or CurrentTarget.Character:FindFirstChildOfClass("Humanoid").Health <= 0
+        or tick() - TargetStartTime >= 2 then
+
+        LastTarget = CurrentTarget
+        CurrentTarget = GetRandomTarget()
+        TargetStartTime = tick()
+    end
+
+    if CurrentTarget then
+        ShootTarget(CurrentTarget)
+    end
+end
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if AutoShoot and not AutoDetectWin then
+            local TargetDead = false
+
+            if CurrentTarget then
+                local Character = CurrentTarget.Character
+                local Humanoid =
+                    Character
+                    and Character:FindFirstChildOfClass("Humanoid")
+
+                if not Humanoid or Humanoid.Health <= 0 then
+                    TargetDead = true
+                end
+            end
+
+            if not CurrentTarget
+                or TargetDead
+                or tick() - TargetStartTime >= 2 then
+
+                LastTarget = CurrentTarget
+                CurrentTarget = GetRandomTarget()
+                TargetStartTime = tick()
+            end
+
+            if CurrentTarget then
+                ShootTarget(CurrentTarget)
+            end
+        elseif not AutoShoot then
+            CurrentTarget = nil
+            LastTarget = nil
+            TargetStartTime = 0
+        end
+    end
+end)
+
+MainTab:CreateToggle({
+    Name = "Auto Win",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        AutoDetectWin = Value
+
+        if Value then
+            CurrentTarget = nil
+            LastTarget = nil
+            TargetStartTime = 0
+        else
+            if AutoWinBaseplate then
+                AutoWinBaseplate:Destroy()
+                AutoWinBaseplate = nil
+            end
+
+            CurrentTarget = nil
+            LastTarget = nil
+            TargetStartTime = 0
+        end
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if AutoDetectWin then
+            local Character = LocalPlayer.Character
+            local Root =
+                Character
+                and Character:FindFirstChild("HumanoidRootPart")
+
+            if Root then
+                AutoWinClickCriminal()
+                AutoWinEatFood()
+                MakeBaseballsMassive()
+                CheckExplosion()
+
+                if AutoShoot then
+                    AutoWinShoot()
+                end
+
+                local DetectWin =
+                    workspace:FindFirstChild("DetectWin", true)
+
+                if DetectWin then
+                    pcall(function()
+                        if DetectWin:IsA("BasePart") then
+                            Root.CFrame = DetectWin.CFrame
+                        elseif DetectWin:IsA("Model") then
+                            Root.CFrame = DetectWin:GetPivot()
+                        end
+                    end)
+                end
+
+                local GardenParts = {}
+
+                for _, Object in ipairs(workspace:GetDescendants()) do
+                    if Object.Name == "GardenPart"
+                        and not GardenPartIsOwnedByLocalPlayer(Object) then
+
+                        table.insert(GardenParts, Object)
+                    end
+                end
+
+                for _, GardenPart in ipairs(GardenParts) do
+                    if not AutoDetectWin then
+                        break
+                    end
+
+                    AutoWinClickCriminal()
+                    AutoWinEatFood()
+                    MakeBaseballsMassive()
+                    CheckExplosion()
+
+                    if AutoShoot then
+                        AutoWinShoot()
+                    end
+
+                    pcall(function()
+                        if GardenPart:IsA("BasePart") then
+                            Root.CFrame =
+                                GardenPart.CFrame
+                                + Vector3.new(
+                                    0,
+                                    GardenPart.Size.Y / 2 + 3,
+                                    0
+                                )
+                        elseif GardenPart:IsA("Model") then
+                            Root.CFrame =
+                                GardenPart:GetPivot()
+                                + Vector3.new(0, 3, 0)
+                        end
+                    end)
+
+                    task.wait(0.1)
+                end
+
+                if AutoDetectWin then
+                    AutoWinClickCriminal()
+                    AutoWinEatFood()
+                    MakeBaseballsMassive()
+                    CheckExplosion()
+
+                    if AutoShoot then
+                        AutoWinShoot()
+                    end
+
+                    local Criminal =
+                        workspace:FindFirstChild(
+                            "CriminalBlueGuy",
+                            true
+                        )
+
+                    if Criminal then
+                        pcall(function()
+                            if Criminal:IsA("BasePart") then
+                                Root.CFrame =
+                                    Criminal.CFrame
+                                    + Vector3.new(
+                                        0,
+                                        Criminal.Size.Y / 2 + 3,
+                                        0
+                                    )
+                            elseif Criminal:IsA("Model") then
+                                Root.CFrame =
+                                    Criminal:GetPivot()
+                                    + Vector3.new(0, 3, 0)
+                            elseif Criminal:IsA("Attachment") then
+                                Root.CFrame =
+                                    Criminal.WorldCFrame
+                                    + Vector3.new(0, 3, 0)
+                            end
+                        end)
+                    end
+                end
+            end
+        end
+    end
+end)
+
+local HitboxEnabled = false
+local OriginalHitboxes = {}
+
+local function SetHitbox(Player)
+    if Player == LocalPlayer then
+        return
+    end
+
+    local Character = Player.Character
+
+    if not Character then
+        return
+    end
+
+    local Root =
+        Character:FindFirstChild("HumanoidRootPart")
+
+    if not Root then
+        return
+    end
+
+    if not OriginalHitboxes[Player] then
+        OriginalHitboxes[Player] = {
+            Size = Root.Size,
+            Transparency = Root.Transparency,
+            CanCollide = Root.CanCollide
+        }
+    end
+
+    Root.Size = Vector3.new(100, 100, 100)
+    Root.Transparency = 0.8
+    Root.CanCollide = false
+end
+
+local function RestoreHitbox(Player)
+    local Character = Player.Character
+
+    local Root =
+        Character
+        and Character:FindFirstChild("HumanoidRootPart")
+
+    local Original =
+        OriginalHitboxes[Player]
+
+    if Root and Original then
+        Root.Size = Original.Size
+        Root.Transparency = Original.Transparency
+        Root.CanCollide = Original.CanCollide
+    end
+
+    OriginalHitboxes[Player] = nil
+end
+
+MainTab:CreateToggle({
+    Name = "Hitbox Expander",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        HitboxEnabled = Value
+
+        if Value then
+            for _, Player in ipairs(Players:GetPlayers()) do
+                SetHitbox(Player)
+            end
+        else
+            for _, Player in ipairs(Players:GetPlayers()) do
+                RestoreHitbox(Player)
+            end
+        end
+    end
+})
+
+local function SetupHitboxPlayer(Player)
+    if Player == LocalPlayer then
+        return
+    end
+
+    Player.CharacterAdded:Connect(function()
+        task.wait(1)
+
+        if HitboxEnabled then
+            SetHitbox(Player)
+        end
+    end)
+end
+
+for _, Player in ipairs(Players:GetPlayers()) do
+    SetupHitboxPlayer(Player)
+end
+
+Players.PlayerAdded:Connect(function(Player)
+    SetupHitboxPlayer(Player)
+end)
+
+Players.PlayerRemoving:Connect(function(Player)
+    OriginalHitboxes[Player] = nil
+end)
+
+local Baseplate
+
+MainTab:CreateToggle({
+    Name = "Baseplate to Survive",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        if Value then
+            local Character = LocalPlayer.Character
+
+            local Root =
+                Character
+                and Character:FindFirstChild("HumanoidRootPart")
+
+            if not Root then
+                return
+            end
+
+            if Baseplate then
+                Baseplate:Destroy()
+            end
+
+            Baseplate = Instance.new("Part")
+            Baseplate.Name = "Baseplate"
+            Baseplate.Size = Vector3.new(500, 2, 500)
+            Baseplate.Position =
+                Root.Position + Vector3.new(0, 1000, 0)
+
+            Baseplate.Anchored = true
+            Baseplate.CanCollide = true
+            Baseplate.CanTouch = true
+            Baseplate.CanQuery = true
+            Baseplate.Material = Enum.Material.SmoothPlastic
+            Baseplate.Parent = workspace
+
+            Root.CFrame =
+                Baseplate.CFrame + Vector3.new(0, 5, 0)
+        else
+            if Baseplate then
+                Baseplate:Destroy()
+                Baseplate = nil
+            end
+        end
+    end
+})
+
+local NoclipEnabled = false
+local NoclipOriginals = {}
+
+local function ApplyNoclip()
+    local Character = LocalPlayer.Character
+
+    if not Character then
+        return
+    end
+
+    for _, Object in ipairs(Character:GetDescendants()) do
+        if Object:IsA("BasePart") then
+            if NoclipOriginals[Object] == nil then
+                NoclipOriginals[Object] = Object.CanCollide
+            end
+
+            Object.CanCollide = false
+        end
+    end
+end
+
+local function RestoreNoclip()
+    for Object, Original in pairs(NoclipOriginals) do
+        if Object and Object.Parent then
+            Object.CanCollide = Original
+        end
+    end
+
+    table.clear(NoclipOriginals)
+end
+
+MainTab:CreateToggle({
+    Name = "Noclip",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        NoclipEnabled = Value
+
+        if not Value then
+            RestoreNoclip()
+        end
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if NoclipEnabled then
+            ApplyNoclip()
+        end
+    end
+end)
+
+local MoreSpeed = false
+local SpeedValue = 50
+local OriginalWalkSpeed = {}
+
+local function ApplySpeed(Character)
+    local Humanoid =
+        Character
+        and Character:FindFirstChildOfClass("Humanoid")
+
+    if not Humanoid then
+        return
+    end
+
+    if OriginalWalkSpeed[Humanoid] == nil then
+        OriginalWalkSpeed[Humanoid] = Humanoid.WalkSpeed
+    end
+
+    Humanoid.WalkSpeed = SpeedValue
+end
+
+local function RestoreSpeed()
+    for Humanoid, Speed in pairs(OriginalWalkSpeed) do
+        if Humanoid and Humanoid.Parent then
+            pcall(function()
+                Humanoid.WalkSpeed = Speed
+            end)
+        end
+    end
+
+    table.clear(OriginalWalkSpeed)
+end
+
+MainTab:CreateToggle({
+    Name = "Get Faster",
+    CurrentValue = false,
+
+    Callback = function(Value)
+        MoreSpeed = Value
+
+        if not Value then
+            RestoreSpeed()
+        end
+    end
+})
+
+task.spawn(function()
+    while task.wait(0.1) do
+        if MoreSpeed then
+            local Character = LocalPlayer.Character
+
+            if Character then
+                ApplySpeed(Character)
+            end
+        end
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function(Character)
+    task.wait(0.5)
+
+    if NoclipEnabled then
+        ApplyNoclip()
+    end
+
+    if MoreSpeed then
+        ApplySpeed(Character)
+    end
+end)
+
+Rayfield:LoadConfiguration()
