@@ -1,0 +1,1388 @@
+local Rayfield = loadstring(game:HttpGet("https://sirius.menu/gen2"))()
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local LocalPlayer = Players.LocalPlayer
+local _v4 = Rayfield:CreateWindow({
+    Name = "Slopware"
+})
+local _v5 = _v4:CreateTab({
+    Name = "Main"
+})
+local _v6 = false
+local _v7 = {}
+local function _v5a(_vc)
+    if _v7[_vc] then
+        for _v86, Object in ipairs(_v7[_vc]) do
+            if Object and Object.Parent then
+                Object:Destroy()
+            end
+        end
+        _v7[_vc] = nil
+    end
+end
+local function _v5b(_vc)
+    if not _vc or _vc.Name ~= "CriminalBlueGuy" then
+        return
+    end
+    _v5a(_vc)
+    local _v8 = _vc.Character
+    if not _v8 then
+        return
+    end
+    local _v9 = Instance.new("Highlight")
+    _v9.Name = "SlopwareESP"
+    _v9.Adornee = _v8
+    _v9.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    _v9.FillTransparency = 0.5
+    _v9.OutlineTransparency = 0
+    _v9.Parent = _v8
+    local _va = Instance.new("BillboardGui")
+    _va.Name = "SlopwareESPText"
+    _va.Size = UDim2.fromOffset(150, 40)
+    _va.StudsOffset = Vector3.new(0, 3.5, 0)
+    _va.AlwaysOnTop = true
+    _va.Parent = _v8
+    local _vb = Instance.new("TextLabel")
+    _vb.Size = UDim2.fromScale(1, 1)
+    _vb.BackgroundTransparency = 1
+    _vb.Text = "right here"
+    _vb.TextScaled = true
+    _vb.Font = Enum.Font.GothamBold
+    _vb.TextColor3 = Color3.new(1, 1, 1)
+    _vb.TextStrokeTransparency = 0
+    _vb.Parent = _va
+    _v7[_vc] = {
+        _v9,
+        _va
+    }
+end
+local function _v5c(_vc)
+    _vc.CharacterAdded:Connect(function()
+        task.wait(0.5)
+        if _v6 then
+            _v5b(_vc)
+        end
+    end)
+    if _v6 and _vc.Character then
+        _v5b(_vc)
+    end
+end
+_v5:CreateToggle({
+    Name = "Chill Dev ESP",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v6 = _v39
+        local _vc = Players:FindFirstChild("CriminalBlueGuy")
+        if _v39 then
+            if _vc then
+                _v5b(_vc)
+            end
+        else
+            if _vc then
+                _v5a(_vc)
+            end
+        end
+    end
+})
+local _vd = Players:FindFirstChild("CriminalBlueGuy")
+if _vd then
+    _v5c(_vd)
+end
+Players.PlayerAdded:Connect(function(_vc)
+    if _vc.Name == "CriminalBlueGuy" then
+        _v5c(_vc)
+        task.wait(0.5)
+        if _v6 then
+            _v5b(_vc)
+        end
+    end
+end)
+Players.PlayerRemoving:Connect(function(_vc)
+    _v5a(_vc)
+end)
+local _ve = {
+    FrontCurtain = true,
+    BadBurger = true,
+    BadHotdog = true,
+    BadChicken = true
+}
+local _vf = false
+_v5:CreateToggle({
+    Name = "Remove Curtains n More",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _vf = _v39
+    end
+})
+task.spawn(function()
+    while task.wait(0.2) do
+        if _vf then
+            for _v86, Object in ipairs(workspace:GetDescendants()) do
+                if _ve[Object.Name] then
+                    pcall(function()
+                        Object:Destroy()
+                    end)
+                end
+            end
+        end
+    end
+end)
+local _v10 = false
+_v5:CreateToggle({
+    Name = "Auto Click Food",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v10 = _v39
+    end
+})
+task.spawn(function()
+    while task.wait(0.1) do
+        if _v10 then
+            for _v86, Object in ipairs(workspace:GetDescendants()) do
+                if Object.Name == "Burger"
+                    or Object.Name == "Chicken"
+                    or Object.Name == "Hotdog" then
+                    local _v11 =
+                        Object:FindFirstChildOfClass("ClickDetector")
+                    if _v11 then
+                        pcall(function()
+                            fireclickdetector(_v11)
+                        end)
+                    end
+                end
+            end
+        end
+    end
+end)
+local _v12 = false
+_v5:CreateToggle({
+    Name = "Auto Click Criminal",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v12 = _v39
+    end
+})
+task.spawn(function()
+    while task.wait(0.1) do
+        if _v12 then
+            local _v13 =
+                workspace:FindFirstChild("CriminalBlueGuy", true)
+            if _v13 then
+                for _v86, Object in ipairs(_v13:GetDescendants()) do
+                    if Object:IsA("ClickDetector") then
+                        pcall(function()
+                            fireclickdetector(Object)
+                        end)
+                    end
+                end
+                if _v13:IsA("BasePart") then
+                    local _v11 =
+                        _v13:FindFirstChildOfClass("ClickDetector")
+                    if _v11 then
+                        pcall(function()
+                            fireclickdetector(_v11)
+                        end)
+                    end
+                end
+            end
+        end
+    end
+end)
+local _v14 = false
+local _v15
+local _v16 = Vector3.new(500, 500, 500)
+local _v17 = {
+    TankZombieEnemy = true,
+    WitchEnemy = true,
+    ZombieEnemy = true
+}
+local _v18 = {}
+local _v19 = false
+local _v1a = nil
+local _v1b = nil
+local function _v5d()
+    local _v8 = LocalPlayer.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    if not _v1c then
+        return
+    end
+    if _v15 and _v15.Parent then
+        _v1c.CFrame =
+            _v15.CFrame + Vector3.new(0, 5, 0)
+        return
+    end
+    _v15 = Instance.new("Part")
+    _v15.Name = "AutoWinBaseplate"
+    _v15.Size = Vector3.new(500, 2, 500)
+    _v15.Position =
+        _v1c.Position + Vector3.new(0, 1000, 0)
+    _v15.Anchored = true
+    _v15.CanCollide = true
+    _v15.CanTouch = true
+    _v15.CanQuery = true
+    _v15.Material = Enum.Material.SmoothPlastic
+    _v15.Parent = workspace
+    _v1c.CFrame =
+        _v15.CFrame + Vector3.new(0, 5, 0)
+end
+local function _v5e()
+    local _v13 =
+        workspace:FindFirstChild("CriminalBlueGuy", true)
+    if _v13 then
+        for _v86, Object in ipairs(_v13:GetDescendants()) do
+            if Object:IsA("ClickDetector") then
+                pcall(function()
+                    fireclickdetector(Object)
+                end)
+            end
+        end
+        if _v13:IsA("BasePart") then
+            local _v11 =
+                _v13:FindFirstChildOfClass("ClickDetector")
+            if _v11 then
+                pcall(function()
+                    fireclickdetector(_v11)
+                end)
+            end
+        end
+    end
+end
+local function _v5f()
+    for _v86, Object in ipairs(workspace:GetDescendants()) do
+        if Object.Name == "Burger"
+            or Object.Name == "Chicken"
+            or Object.Name == "Hotdog" then
+            local _v11 =
+                Object:FindFirstChildOfClass("ClickDetector")
+            if _v11 then
+                pcall(function()
+                    fireclickdetector(_v11)
+                end)
+            end
+        end
+    end
+end
+local function _v60()
+    local _v1d =
+        workspace:FindFirstChild("Explosion", true)
+    if _v1d then
+        _v5d()
+        return true
+    end
+    return false
+end
+local function _v61(GardenPart)
+    local _v1e = GardenPart:FindFirstChild("PartOwner", true)
+    if not _v1e then
+        return false
+    end
+    local _v1f
+    pcall(function()
+        _v1f = _v1e.Value
+    end)
+    if typeof(_v1f) == "Instance" then
+        return _v1f == LocalPlayer
+    end
+    if typeof(_v1f) == "number" then
+        return _v1f == LocalPlayer.UserId
+    end
+    if typeof(_v1f) == "string" then
+        return _v1f == LocalPlayer.Name
+            or _v1f == LocalPlayer.DisplayName
+            or _v1f == tostring(LocalPlayer.UserId)
+    end
+    return false
+end
+local _v20 = false
+local _v21 = nil
+local _v22 = 0
+local _v23 = nil
+local function _v62()
+    local _v24 = {}
+    for _v86, _vc in ipairs(Players:GetPlayers()) do
+        if _vc ~= LocalPlayer and _vc ~= _v23 then
+            local _v8 = _vc.Character
+            local _v25 =
+                _v8
+                and _v8:FindFirstChildOfClass("Humanoid")
+            if _v25 and _v25.Health > 0 then
+                table.insert(_v24, _vc)
+            end
+        end
+    end
+    if #_v24 == 0 then
+        for _v86, _vc in ipairs(Players:GetPlayers()) do
+            if _vc ~= LocalPlayer then
+                local _v8 = _vc.Character
+                local _v25 =
+                    _v8
+                    and _v8:FindFirstChildOfClass("Humanoid")
+                if _v25 and _v25.Health > 0 then
+                    table.insert(_v24, _vc)
+                end
+            end
+        end
+    end
+    if #_v24 > 0 then
+        return _v24[math.random(1, #_v24)]
+    end
+    return nil
+end
+local function _v63(TargetPlayer)
+    if not TargetPlayer then
+        return false
+    end
+    local _v8 = LocalPlayer.Character
+    if not _v8 then
+        return false
+    end
+    local _v1c =
+        _v8:FindFirstChild("HumanoidRootPart")
+    local _v26 =
+        _v8:FindFirstChild("PistolTool")
+    local _v27 =
+        _v26
+        and _v26:FindFirstChild("Activation")
+    if not _v1c or not _v27 then
+        return false
+    end
+    local _v28 = TargetPlayer.Character
+    if not _v28 then
+        return false
+    end
+    local _v29 =
+        _v28:FindFirstChild("HumanoidRootPart")
+    local _v25 =
+        _v28:FindFirstChildOfClass("Humanoid")
+    if not _v29
+        or not _v25
+        or _v25.Health <= 0 then
+        return false
+    end
+    _v1c.CFrame =
+        _v29.CFrame
+        * CFrame.new(0, 0, 5)
+    pcall(function()
+        _v27:FireServer(
+            _v29,
+            _v29.CFrame
+        )
+    end)
+    return true
+end
+_v5:CreateToggle({
+    Name = "AutoShoot",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v20 = _v39
+        if not _v39 then
+            _v21 = nil
+            _v23 = nil
+            _v22 = 0
+        end
+    end
+})
+local function _v64()
+    if not _v21
+        or not _v21.Character
+        or not _v21.Character:FindFirstChildOfClass("Humanoid")
+        or _v21.Character:FindFirstChildOfClass("Humanoid").Health <= 0
+        or tick() - _v22 >= 2 then
+        _v23 = _v21
+        _v21 = _v62()
+        _v22 = tick()
+    end
+    if _v21 then
+        if not _v63(_v21) then
+            _v23 = _v21
+            _v21 = _v62()
+            _v22 = tick()
+        end
+    end
+end
+task.spawn(function()
+    while task.wait(0.1) do
+        if _v20 and not _v14 then
+            local _v2a = false
+            if _v21 then
+                local _v8 = _v21.Character
+                local _v25 =
+                    _v8
+                    and _v8:FindFirstChildOfClass("Humanoid")
+                if not _v25 or _v25.Health <= 0 then
+                    _v2a = true
+                end
+            end
+            if not _v21
+                or _v2a
+                or tick() - _v22 >= 2 then
+                _v23 = _v21
+                _v21 = _v62()
+                _v22 = tick()
+            end
+            if _v21 then
+                if not _v63(_v21) then
+                    _v23 = _v21
+                    _v21 = _v62()
+                    _v22 = tick()
+                end
+            end
+        elseif not _v20 then
+            _v21 = nil
+            _v23 = nil
+            _v22 = 0
+        end
+    end
+end)
+local function _v65()
+    local _v2b =
+        workspace:FindFirstChild("GameSystem", true)
+    if not _v2b then
+        return nil
+    end
+    local _v2c = {}
+    for _v86, Object in ipairs(_v2b:GetDescendants()) do
+        if Object.Name == "DeleteAfterMinigame" then
+            table.insert(_v2c, Object)
+        end
+    end
+    local _v2d =
+        _v2b:FindFirstChild("DeleteAfterMinigame")
+    if _v2d then
+        table.insert(_v2c, _v2d)
+    end
+    local _v2e = LocalPlayer.Name .. "Map"
+    for _v86, DeleteAfterMinigame in ipairs(_v2c) do
+        for _v86, Object in ipairs(DeleteAfterMinigame:GetDescendants()) do
+            if Object.Name == "Map" then
+                local _v2f =
+                    Object:FindFirstChild(_v2e)
+                if _v2f then
+                    return _v2f
+                end
+            end
+            if Object.Name == _v2e then
+                return Object
+            end
+        end
+    end
+    return nil
+end
+local function _v66(Object)
+    if not Object or not Object.Parent then
+        return nil
+    end
+    if Object:IsA("BasePart") then
+        return Object.CFrame
+    end
+    if Object:IsA("Model") then
+        return Object:GetPivot()
+    end
+    if Object:IsA("Attachment") then
+        return Object.WorldCFrame
+    end
+    local _v30 = Object:FindFirstChildWhichIsA("BasePart", true)
+    if _v30 then
+        return _v30.CFrame
+    end
+    return nil
+end
+local function _v67(Object, TouchGate)
+    local _v8 = LocalPlayer.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    local _v31 = _v66(Object)
+    if not _v1c or not _v31 then
+        return false
+    end
+    if not TouchGate then
+        _v31 = _v31 + Vector3.new(0, 3, 5)
+    end
+    local _v32 =
+        (_v1c.Position - _v31.Position).Magnitude
+    local _v33 =
+        math.clamp(_v32 / 35, 0.5, 2.5)
+    local _v34 = TweenService:Create(
+        _v1c,
+        TweenInfo.new(
+            _v33,
+            Enum.EasingStyle.Linear,
+            Enum.EasingDirection.Out
+        ),
+        {CFrame = _v31}
+    )
+    _v34:Play()
+    while _v34.PlaybackState == Enum.PlaybackState.Playing do
+        if not _v14 then
+            _v34:Cancel()
+            return false
+        end
+        task.wait()
+    end
+    return true
+end
+local function _v68(Object)
+    return _v67(Object, false)
+end
+local function _v69(Object)
+    local _v8 = LocalPlayer.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    local _v31 = _v66(Object)
+    if not _v1c or not _v31 then
+        return false
+    end
+    _v31 = _v31 + Vector3.new(0, 3, 5)
+    local _v32 =
+        (_v1c.Position - _v31.Position).Magnitude
+    local _v33 =
+        math.clamp(_v32 / 70, 0.15, 1)
+    local _v34 = TweenService:Create(
+        _v1c,
+        TweenInfo.new(
+            _v33,
+            Enum.EasingStyle.Linear,
+            Enum.EasingDirection.Out
+        ),
+        {CFrame = _v31}
+    )
+    _v34:Play()
+    while _v34.PlaybackState == Enum.PlaybackState.Playing do
+        if not _v14 then
+            _v34:Cancel()
+            return false
+        end
+        task.wait()
+    end
+    return true
+end
+local function _v6a(_v87)
+    if not _v87 or not _v87.Parent then
+        return
+    end
+    if not _v17[_v87.Name] then
+        return
+    end
+    local _v1c =
+        _v87:FindFirstChild("HumanoidRootPart", true)
+    if _v1c and _v1c:IsA("BasePart") then
+        pcall(function()
+            _v1c.Size = _v16
+            _v1c.Transparency = 0.8
+            _v1c.CanCollide = false
+            _v1c.CanTouch = true
+            _v1c.CanQuery = true
+        end)
+    end
+end
+local function _v6b(_v47)
+    if not _v47 then
+        return
+    end
+    for _v86, _v87 in ipairs(_v47:GetChildren()) do
+        _v6a(_v87)
+    end
+    if _v18[_v47] then
+        return
+    end
+    _v18[_v47] = true
+    _v47.ChildAdded:Connect(function(_v87)
+        task.wait()
+        if _v14 then
+            _v6a(_v87)
+        end
+    end)
+end
+local function _v6c()
+    local _v8 = LocalPlayer.Character
+    if not _v8 then
+        return nil
+    end
+    return _v8:FindFirstChild("UseSword")
+end
+local _v35 = Vector3.new(500, 500, 500)
+local _v36 = {}
+local _v37 = false
+local function _v6d(_vc)
+    if not _vc or _vc == LocalPlayer then
+        return false
+    end
+    local _v8 = _vc.Character
+    if not _v8 then
+        return false
+    end
+    local _v38 =
+        _v8:FindFirstChild("IsParrying", true)
+    if not _v38 then
+        return false
+    end
+    local _v39
+    pcall(function()
+        _v39 = _v38.Value
+    end)
+    return _v39 == true
+end
+local function _v6e(_vc)
+    if not _vc or _vc == LocalPlayer then
+        return
+    end
+    local _v8 = _vc.Character
+    if not _v8 then
+        return
+    end
+    local _v1c =
+        _v8:FindFirstChild("HumanoidRootPart")
+    if not _v1c or not _v1c:IsA("BasePart") then
+        return
+    end
+    if not _v36[_vc] then
+        _v36[_vc] = {
+            Size = _v1c.Size,
+            Transparency = _v1c.Transparency,
+            CanCollide = _v1c.CanCollide,
+            CanTouch = _v1c.CanTouch,
+            CanQuery = _v1c.CanQuery
+        }
+    end
+    pcall(function()
+        _v1c.Size = _v35
+        _v1c.Transparency = 0.8
+        _v1c.CanCollide = false
+        _v1c.CanTouch = true
+        _v1c.CanQuery = true
+    end)
+end
+local function _v6f()
+    for _v86, _vc in ipairs(Players:GetPlayers()) do
+        if _vc ~= LocalPlayer then
+            _v6e(_vc)
+        end
+    end
+end
+local function _v70()
+    for _vc, _v53 in pairs(_v36) do
+        local _v8 = _vc and _vc.Character
+        local _v1c =
+            _v8
+            and _v8:FindFirstChild("HumanoidRootPart")
+        if _v1c and _v53 then
+            pcall(function()
+                _v1c.Size = _v53.Size
+                _v1c.Transparency = _v53.Transparency
+                _v1c.CanCollide = _v53.CanCollide
+                _v1c.CanTouch = _v53.CanTouch
+                _v1c.CanQuery = _v53.CanQuery
+            end)
+        end
+    end
+    table.clear(_v36)
+end
+local function _v71()
+    _v5d()
+end
+local function _v72(_vc)
+    if not _vc or _vc == LocalPlayer then
+        return
+    end
+    if _v6d(_vc) then
+        return
+    end
+    local _v8 = LocalPlayer.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    local _v28 = _vc.Character
+    local _v29 =
+        _v28
+        and _v28:FindFirstChild("HumanoidRootPart")
+    local _v25 =
+        _v28
+        and _v28:FindFirstChildOfClass("Humanoid")
+    if not _v1c or not _v29 or not _v25 or _v25.Health <= 0 then
+        return
+    end
+    _v6e(_vc)
+    local _v31 =
+        _v29.CFrame
+        * CFrame.new(0, -13, 0)
+    pcall(function()
+        _v8:PivotTo(_v31)
+        _v1c.CFrame = _v31
+        _v1c.AssemblyLinearVelocity = Vector3.zero
+        _v1c.AssemblyAngularVelocity = Vector3.zero
+    end)
+    local _v3a = _v6c()
+    if _v3a then
+        for _v86 = 1, 6 do
+            if not _v14 or not _v29.Parent then
+                break
+            end
+            pcall(function()
+                _v8:PivotTo(_v31)
+                _v1c.CFrame = _v31
+                _v1c.AssemblyLinearVelocity = Vector3.zero
+                _v1c.AssemblyAngularVelocity = Vector3.zero
+                _v3a:FireServer()
+            end)
+            task.wait(0.05)
+        end
+    end
+end
+local function _v73()
+    _v6f()
+    local _v3a = _v6c()
+    if not _v3a then
+        return
+    end
+    local _v3b = false
+    for _v86, _vc in ipairs(Players:GetPlayers()) do
+        if _vc ~= LocalPlayer
+            and _vc.Character then
+            local _v25 =
+                _vc.Character:FindFirstChildOfClass("Humanoid")
+            if _v25 and _v25.Health > 0 then
+                if _v6d(_vc) then
+                    _v3b = true
+                end
+            end
+        end
+    end
+    if _v3b then
+        if not _v37 then
+            _v37 = true
+        end
+        _v71()
+        return
+    end
+    _v37 = false
+    for _v86, _vc in ipairs(Players:GetPlayers()) do
+        if _vc ~= LocalPlayer
+            and _vc.Character
+            and not _v6d(_vc) then
+            local _v25 =
+                _vc.Character:FindFirstChildOfClass("Humanoid")
+            if _v25 and _v25.Health > 0 then
+                _v72(_vc)
+            end
+        end
+    end
+end
+local function _v74(_v87)
+    if not _v87 or not _v87.Parent then
+        return false
+    end
+    local _v8 = LocalPlayer.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    local _v3c =
+        _v87:FindFirstChild("HumanoidRootPart", true)
+    if not _v1c or not _v3c or not _v3c:IsA("BasePart") then
+        return false
+    end
+    pcall(function()
+        _v1c.CFrame =
+            _v3c.CFrame
+            * CFrame.new(0, -13, 0)
+    end)
+    return true
+end
+local function _v75(_v87)
+    if not _v87 or not _v87.Parent then
+        return false
+    end
+    if not _v17[_v87.Name] then
+        return false
+    end
+    local _v8 = LocalPlayer.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    if not _v1c then
+        return false
+    end
+    local _v3c =
+        _v87:FindFirstChild("HumanoidRootPart", true)
+    if not _v3c and _v87:IsA("BasePart") then
+        _v3c = _v87
+    end
+    if not _v3c then
+        return false
+    end
+    _v6a(_v87)
+    _v74(_v87)
+    local _v3a = _v6c()
+    if not _v3a then
+        return false
+    end
+    for _v86 = 1, 10 do
+        if not _v14 or not _v87.Parent then
+            break
+        end
+        local _v25 =
+            _v87:FindFirstChildOfClass("Humanoid")
+        if _v25 and _v25.Health <= 0 then
+            break
+        end
+        pcall(function()
+            _v3a:FireServer()
+        end)
+        task.wait(0.15)
+    end
+    return true
+end
+local function _v76(Tile)
+    local _v3d =
+        string.match(Tile.Name, "^Tile(%d+)$")
+    return tonumber(_v3d) or math.huge
+end
+local function _v77(_v48)
+    local _v3e = {}
+    for _v86, Object in ipairs(_v48:GetChildren()) do
+        if (Object:IsA("Model") or Object:IsA("Folder"))
+            and string.match(Object.Name, "^Tile%d+$") then
+            table.insert(_v3e, Object)
+        end
+    end
+    table.sort(_v3e, function(_v88, _v89)
+        local _v3f = _v76(_v88)
+        local _v40 = _v76(_v89)
+        if _v3f == _v40 then
+            return _v88.Name < _v89.Name
+        end
+        return _v3f < _v40
+    end)
+    return _v3e
+end
+local function _v78(UserMapOrTile)
+    local _v41 =
+        UserMapOrTile:FindFirstChild("StartPath", true)
+    if _v41 then
+        local _v42 =
+            _v41:FindFirstChild("OpenGate", true)
+        if _v42 then
+            return _v42
+        end
+    end
+    return UserMapOrTile:FindFirstChild("OpenGate", true)
+end
+local function _v79(Tile)
+    return Tile:FindFirstChild("CloseGate", true)
+end
+local function _v7a(Tile)
+    return Tile:FindFirstChild("Enemies", true)
+end
+local function _v7b(Tile)
+    local _v43 =
+        Tile:FindFirstChild("EnemiesLeft", true)
+    if not _v43 then
+        return nil
+    end
+    local _v39
+    pcall(function()
+        _v39 = _v43.Value
+    end)
+    if typeof(_v39) == "number" then
+        return _v39
+    end
+    return nil
+end
+local function _v7c(_v47)
+    local _v44 = {}
+    if not _v47 then
+        return _v44
+    end
+    for _v86, _v87 in ipairs(_v47:GetChildren()) do
+        if _v17[_v87.Name] then
+            local _v25 =
+                _v87:FindFirstChildOfClass("Humanoid")
+                or _v87:FindFirstChild("Humanoid", true)
+            if _v25 and _v25.Health > 0 then
+                table.insert(_v44, _v87)
+            end
+        end
+    end
+    return _v44
+end
+local function _v7d(Tile)
+    if not Tile or not Tile.Parent then
+        return false
+    end
+    local _v45 = _v78(Tile)
+    if _v45 then
+        if not _v67(_v45, false) then
+            return false
+        end
+        _v1a = _v45
+        task.wait(0.2)
+    end
+    if not _v14 then
+        return false
+    end
+    local _v46 = _v79(Tile)
+    if _v46 then
+        if not _v67(_v46, true) then
+            return false
+        end
+        _v1a = _v46
+        task.wait(0.1)
+    end
+    local _v47 = _v7a(Tile)
+    if not _v47 then
+        return true
+    end
+    _v6b(_v47)
+    while _v14 and Tile.Parent do
+        local _v44 = _v7c(_v47)
+        local _v43 = _v7b(Tile)
+        if #_v44 > 0 then
+            break
+        end
+        if typeof(_v43) == "number" and _v43 <= 0 then
+            return true
+        end
+        task.wait(0.1)
+    end
+    while _v14 and Tile.Parent do
+        local _v44 = _v7c(_v47)
+        local _v43 = _v7b(Tile)
+        if #_v44 > 0 then
+            _v74(_v44[1])
+            for _v86, _v87 in ipairs(_v44) do
+                if not _v14 then
+                    return false
+                end
+                if _v87.Parent then
+                    _v6a(_v87)
+                    _v75(_v87)
+                end
+            end
+            task.wait(0.1)
+        else
+            if typeof(_v43) == "number" then
+                if _v43 <= 0 then
+                    break
+                end
+                task.wait(0.1)
+            else
+                task.wait(0.1)
+            end
+        end
+    end
+    if not _v14 then
+        return false
+    end
+    return true
+end
+local function _v7e()
+    local _v48 = _v65()
+    if not _v48 then
+        return false
+    end
+    if not _v19 then
+        local _v41 =
+            _v48:FindFirstChild("StartPath", true)
+        local _v45 =
+            _v41
+            and _v41:FindFirstChild("OpenGate", true)
+        if not _v45 then
+            _v45 =
+                _v48:FindFirstChild("OpenGate", true)
+        end
+        if _v45 then
+            if not _v67(_v45, false) then
+                return false
+            end
+            _v19 = true
+            _v1a = _v45
+            task.wait(0.25)
+        end
+    end
+    local _v49 = {}
+    while _v14 and _v48.Parent do
+        local _v3e = _v77(_v48)
+        local _v4a = false
+        for _v86, Tile in ipairs(_v3e) do
+            if not _v14 then
+                return false
+            end
+            if not _v49[Tile] then
+                _v1b = Tile
+                local _v4b = _v7d(Tile)
+                if not _v4b then
+                    return false
+                end
+                _v49[Tile] = true
+                _v4a = true
+                local _v4c = _v77(_v48)
+                local _v4d = nil
+                for _v86, Candidate in ipairs(_v4c) do
+                    if not _v49[Candidate] then
+                        _v4d = Candidate
+                        break
+                    end
+                end
+                if _v4d then
+                    local _v4e = _v78(_v4d)
+                    if _v4e then
+                        if not _v67(_v4e, false) then
+                            return false
+                        end
+                        _v1a = _v4e
+                        task.wait(0.15)
+                    end
+                end
+                task.wait(0.15)
+            end
+        end
+        if not _v4a then
+            task.wait(0.1)
+        end
+    end
+    return true
+end
+_v5:CreateToggle({
+    Name = "Auto Win",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v14 = _v39
+        if _v39 then
+            _v19 = false
+            _v1a = nil
+            _v1b = nil
+            table.clear(_v18)
+            _v21 = nil
+            _v23 = nil
+            _v22 = 0
+        else
+            if _v15 then
+                _v15:Destroy()
+                _v15 = nil
+            end
+            _v19 = false
+            _v1a = nil
+            _v1b = nil
+            table.clear(_v18)
+            _v21 = nil
+            _v23 = nil
+            _v22 = 0
+            _v37 = false
+            _v70()
+        end
+    end
+})
+task.spawn(function()
+    while task.wait(0.05) do
+        if _v14 then
+            _v6f()
+        end
+    end
+end)
+task.spawn(function()
+    while task.wait(0.1) do
+        if _v14 then
+            local _v8 = LocalPlayer.Character
+            local _v1c =
+                _v8
+                and _v8:FindFirstChild("HumanoidRootPart")
+            if _v1c then
+                local _v48 = _v65()
+                if _v48 then
+                    _v7e()
+                else
+                    _v5e()
+                    _v5f()
+                    _v60()
+                    _v73()
+                    _v64()
+                    local _v4f =
+                        workspace:FindFirstChild("DetectWin", true)
+                    if _v4f then
+                        pcall(function()
+                            if _v4f:IsA("BasePart") then
+                                _v1c.CFrame = _v4f.CFrame
+                            elseif _v4f:IsA("Model") then
+                                _v1c.CFrame = _v4f:GetPivot()
+                            end
+                        end)
+                    end
+                    local _v50 = {}
+                    for _v86, Object in ipairs(workspace:GetDescendants()) do
+                        if Object.Name == "GardenPart"
+                            and not _v61(Object) then
+                            table.insert(_v50, Object)
+                        end
+                    end
+                    for _v86, GardenPart in ipairs(_v50) do
+                        if not _v14 then
+                            break
+                        end
+                        _v5e()
+                        _v5f()
+                        _v60()
+                        _v73()
+                        _v64()
+                        _v69(GardenPart)
+                        task.wait(0.03)
+                    end
+                    if _v14 then
+                        _v5e()
+                        _v5f()
+                        _v60()
+                        _v73()
+                        _v64()
+                        local _v13 =
+                            workspace:FindFirstChild(
+                                "CriminalBlueGuy",
+                                true
+                            )
+                        if _v13 then
+                            pcall(function()
+                                if _v13:IsA("BasePart") then
+                                    _v1c.CFrame =
+                                        _v13.CFrame
+                                        + Vector3.new(
+                                            0,
+                                            _v13.Size.Y / 2 + 3,
+                                            0
+                                        )
+                                elseif _v13:IsA("Model") then
+                                    _v1c.CFrame =
+                                        _v13:GetPivot()
+                                        + Vector3.new(0, 3, 0)
+                                elseif _v13:IsA("Attachment") then
+                                    _v1c.CFrame =
+                                        _v13.WorldCFrame
+                                        + Vector3.new(0, 3, 0)
+                                end
+                            end)
+                        end
+                    end
+                end
+            end
+        end
+    end
+end)
+local _v51 = false
+local _v52 = {}
+local function _v7f(_vc)
+    if _vc == LocalPlayer then
+        return
+    end
+    local _v8 = _vc.Character
+    if not _v8 then
+        return
+    end
+    local _v1c =
+        _v8:FindFirstChild("HumanoidRootPart")
+    if not _v1c then
+        return
+    end
+    if not _v52[_vc] then
+        _v52[_vc] = {
+            Size = _v1c.Size,
+            Transparency = _v1c.Transparency,
+            CanCollide = _v1c.CanCollide
+        }
+    end
+    _v1c.Size = Vector3.new(500, 500, 500)
+    _v1c.Transparency = 0.8
+    _v1c.CanCollide = false
+end
+local function _v80(_vc)
+    local _v8 = _vc.Character
+    local _v1c =
+        _v8
+        and _v8:FindFirstChild("HumanoidRootPart")
+    local _v53 =
+        _v52[_vc]
+    if _v1c and _v53 then
+        _v1c.Size = _v53.Size
+        _v1c.Transparency = _v53.Transparency
+        _v1c.CanCollide = _v53.CanCollide
+    end
+    _v52[_vc] = nil
+end
+_v5:CreateToggle({
+    Name = "Hitbox Expander",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v51 = _v39
+        if _v39 then
+            for _v86, _vc in ipairs(Players:GetPlayers()) do
+                _v7f(_vc)
+            end
+        else
+            for _v86, _vc in ipairs(Players:GetPlayers()) do
+                _v80(_vc)
+            end
+        end
+    end
+})
+local function _v81(_vc)
+    if _vc == LocalPlayer then
+        return
+    end
+    _vc.CharacterAdded:Connect(function()
+        task.wait(1)
+        if _v51 then
+            _v7f(_vc)
+        end
+    end)
+end
+for _v86, _vc in ipairs(Players:GetPlayers()) do
+    _v81(_vc)
+end
+Players.PlayerAdded:Connect(function(_vc)
+    _v81(_vc)
+end)
+Players.PlayerRemoving:Connect(function(_vc)
+    _v52[_vc] = nil
+end)
+task.spawn(function()
+    while task.wait(0.05) do
+        if _v51 then
+            for _v86, _vc in ipairs(Players:GetPlayers()) do
+                if _vc ~= LocalPlayer then
+                    _v7f(_vc)
+                end
+            end
+        end
+    end
+end)
+local _v54
+_v5:CreateToggle({
+    Name = "Baseplate to Survive",
+    CurrentValue = false,
+    Callback = function(_v39)
+        if _v39 then
+            local _v8 = LocalPlayer.Character
+            local _v1c =
+                _v8
+                and _v8:FindFirstChild("HumanoidRootPart")
+            if not _v1c then
+                return
+            end
+            if _v54 then
+                _v54:Destroy()
+            end
+            _v54 = Instance.new("Part")
+            _v54.Name = "Baseplate"
+            _v54.Size = Vector3.new(500, 2, 500)
+            _v54.Position =
+                _v1c.Position + Vector3.new(0, 1000, 0)
+            _v54.Anchored = true
+            _v54.CanCollide = true
+            _v54.CanTouch = true
+            _v54.CanQuery = true
+            _v54.Material = Enum.Material.SmoothPlastic
+            _v54.Parent = workspace
+            _v1c.CFrame =
+                _v54.CFrame + Vector3.new(0, 5, 0)
+        else
+            if _v54 then
+                _v54:Destroy()
+                _v54 = nil
+            end
+        end
+    end
+})
+local _v55 = false
+local _v56 = {}
+local function _v82()
+    local _v8 = LocalPlayer.Character
+    if not _v8 then
+        return
+    end
+    for _v86, Object in ipairs(_v8:GetDescendants()) do
+        if Object:IsA("BasePart") then
+            if _v56[Object] == nil then
+                _v56[Object] = Object.CanCollide
+            end
+            Object.CanCollide = false
+        end
+    end
+end
+local function _v83()
+    for Object, _v53 in pairs(_v56) do
+        if Object and Object.Parent then
+            Object.CanCollide = _v53
+        end
+    end
+    table.clear(_v56)
+end
+_v5:CreateToggle({
+    Name = "Noclip",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v55 = _v39
+        if not _v39 then
+            _v83()
+        end
+    end
+})
+task.spawn(function()
+    while task.wait(0.1) do
+        if _v55 then
+            _v82()
+        end
+    end
+end)
+local _v57 = false
+local _v58 = 50
+local _v59 = {}
+local function _v84(_v8)
+    local _v25 =
+        _v8
+        and _v8:FindFirstChildOfClass("Humanoid")
+    if not _v25 then
+        return
+    end
+    if _v59[_v25] == nil then
+        _v59[_v25] = _v25.WalkSpeed
+    end
+    _v25.WalkSpeed = _v58
+end
+local function _v85()
+    for _v25, Speed in pairs(_v59) do
+        if _v25 and _v25.Parent then
+            pcall(function()
+                _v25.WalkSpeed = Speed
+            end)
+        end
+    end
+    table.clear(_v59)
+end
+_v5:CreateToggle({
+    Name = "Get Faster",
+    CurrentValue = false,
+    Callback = function(_v39)
+        _v57 = _v39
+        if not _v39 then
+            _v85()
+        end
+    end
+})
+task.spawn(function()
+    while task.wait(0.1) do
+        if _v57 then
+            local _v8 = LocalPlayer.Character
+            if _v8 then
+                _v84(_v8)
+            end
+        end
+    end
+end)
+LocalPlayer.CharacterAdded:Connect(function(_v8)
+    task.wait(0.5)
+    if _v55 then
+        _v82()
+    end
+    if _v57 then
+        _v84(_v8)
+    end
+end)
